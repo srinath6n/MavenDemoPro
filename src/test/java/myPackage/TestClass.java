@@ -24,6 +24,7 @@ public class TestClass {
 
 	@Test
 	public void TestMethod() {
+		
 		String sendkeys = "The Rock";
 
 		driver.findElement(By.xpath("//input[@id='search']")).click();
