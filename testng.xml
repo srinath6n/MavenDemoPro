@@ -1,9 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="MavenDemoPro">
 <test name="Maven Test">
- 	<packages>
-		<package name="myPackage.* />
-	</packages>
-	
-</test>
+	 	<classes>
+	 		<class name="myPackage.TestClass"></class>
+	 	</classes>
+	</test>
 </suite>

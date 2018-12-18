@@ -17,6 +17,17 @@
   </properties>
 
 <build>
+
+	<pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
 	<plugins>
 		<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
@@ -29,15 +40,17 @@
 		</plugin>
 		
 		<plugin>
-        	<groupId>org.apache.maven.plugins</groupId>
-	        <artifactId>maven-surefire-plugin</artifactId>
-	        <version>3.0.0-M2</version>
-	        <configuration>
-	          <suiteXmlFiles>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>false</skipTests>
+          
+          <suiteXmlFiles>
 	            <suiteXmlFile>testng.xml</suiteXmlFile>
-	          </suiteXmlFiles>
-	        </configuration>
-	    </plugin>
+	      </suiteXmlFiles>
+          
+        </configuration>
+      </plugin>
 		
 	</plugins>
 	
