@@ -1,5 +1,8 @@
 package myPackage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,32 +10,31 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import definitions.CvtAttrib;
+
 public class TestClass {
 
 	public WebDriver driver;
-
+	
 	@BeforeMethod
-	public void BeforeMethodData() {
-		String webSite = "https://www.youtube.com/";
-
+	public void BeforeMethodData() throws FileNotFoundException, IOException, ParseException {
+		
 		driver = new ChromeDriver();
+		
+		driver.get(CvtAttrib.SData("webSite"));
 
-		driver.get(webSite);
-
-		System.out.println("Opening - " + webSite + " WebSite!!!!");
+		System.out.println("Opening - " + CvtAttrib.SData("webSite") + " WebSite!!!!");
 	}
 
 	@Test
-	public void TestMethod() {
+	public void TestMethod() throws FileNotFoundException, IOException, ParseException {
 		
-		String sendkeys = "The Rock";
+		driver.findElement(By.xpath(CvtAttrib.SData("clickApp"))).click();
 
-		driver.findElement(By.xpath("//input[@id='search']")).click();
+		driver.findElement(By.xpath(CvtAttrib.SData("clickApp"))).sendKeys(CvtAttrib.SData("sendkeys"));
+		System.out.println("Value Input on search button as " + CvtAttrib.SData("sendkeys"));
 
-		driver.findElement(By.xpath("//input[@id='search']")).sendKeys(sendkeys);
-		System.out.println("Value Input on search button as " + sendkeys);
-
-		driver.findElement(By.xpath("//button[@id='search-icon-legacy']")).click();
+		driver.findElement(By.xpath(CvtAttrib.SData("searchIcon"))).click();
 		System.out.println("I Clicked and TimedOut in next 2 Sec!!!");
 
 	}

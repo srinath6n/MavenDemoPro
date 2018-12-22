@@ -1,0 +1,6 @@
+{
+	"webSite" : "https://www.youtube.com/",
+	"clickApp": "//input[@id='search']",
+	"sendkeys" : "The Rock",
+	"searchIcon" : "//button[@id='search-icon-legacy']"
+}
