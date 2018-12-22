@@ -1,5 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="MavenDemoPro">
+<listeners>
+			<listener class-name="myListener.UListener"></listener>
+</listeners>
 <test name="Maven Test">
 	 	<classes>
 	 		<class name="myPackage.TestClass"></class>
