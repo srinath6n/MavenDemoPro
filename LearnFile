@@ -1,0 +1,238 @@
+//TestNG.xml
+
+//Verbose => In Console Window, log details will be less if the count entered least value in verbose attribute.
+
+//Allow-return-values => @test annotation happen to return a value will be ignored, unless you set the attribute to true 
+
+<suite name="suitename" verbose="1to10" allow-return-values="true" group-by-instances="true">
+
+//Can be written using class name
+
+	<test name="testname" allow-return-values="true">
+		<classes>
+			<class name="classname" />
+		</classes>
+	</test>
+	
+	<test name="testname">
+		<classes>
+			<class name="****.****.*****" />
+			<class name="****.****.*****" />
+		</classes>
+	</test>
+	
+//Can be written using Package Name
+
+	<test name="testname">
+		<packages>
+			<package name="***.****" />
+		</packages>
+	</test>
+
+//Including and Excluding Specific groups & Methods
+
+	<test name="testname">
+
+//Including and Excluding Groups
+		<groups>
+			<run>
+				<exclude name="groupName" />
+				<include name="groupName" />
+			</run>
+		</groups>
+
+//Including & Excluding Methods
+
+		<classes>
+			<class name="className">
+				<methods>
+					<include name="testMethod" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+//classes and methods listed in this file to be run in an unpredictable order, set the preserve-order attribute to false
+
+	<test name="testName" preserve-order="false">
+		<classes>
+			<class name="test.className">
+				<methods>
+					<inlcude name="Method1" />
+					<include name="Method2" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+//Using Regular Expression [.*] in Groups and Methods
+
+	<test name="testName">
+		<groups>
+			<run>
+				<include name="groupName.*" />
+				<include name=".*Name.*" />
+			</run>
+		</groups>
+	
+		<classes>
+			<class name="***.****" />
+			<class name="***.****.***">
+				<methods>
+					<include name=".*TestMethod" />
+					<include name=".*Test.*" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+
+//Groups of Groups
+
+	<test name="testName">
+	<groups>
+		<define name="def1">
+			<include name="GroupName" />
+			<include name="GroupName1" />
+		</define>
+		
+		<define name="def2">
+			<include name="def1" />
+			<include name=".*Name" />
+		</define>
+			
+		<run>
+			<include name="def2">
+		</run>
+	</groups>
+	
+	<classes>
+		<class name="ClassName" />
+	</classes>
+	</test>
+</suite>
+
+------
+Program
+------
+
+// Partial Group - Below groups where sample2 method belongs to the group 'myGroup' of the class ClassName and sample1 method belongs to the group 'mySecGroup' which also belongs to 'myGroup'.
+
+@Test(group= {"myGroup"} )
+public class ClassName {
+
+@Test(group = {"mySecGroup"} )
+public static void sample1()
+{
+	................................................
+	................................................
+}
+
+public static void sample2()
+{
+	...............................................
+	...............................................
+}
+
+Parameters:
+
+From TestNG.XML -
+
+XML: 
+
+<suite>
+	<parameter name="myname" value="Rock" />
+</suite
+
+Program
+
+public class myProfile {
+
+@parameter( { "myname" } )
+@Test
+public static void rundata(String myname) {
+
+		System.out.println("My Name is " + myname);
+			
+	}
+}
+
+//Optional to declare the parameters
+@Parameters( { "dr" } )
+@Test
+public static void rundata1(Optional ("mySQL") String dt)
+{
+	................................................................
+}
+
+//Parameters with DataProviders
+
+@DataProvider(name="dataproviderName")
+public Object[][] myData() {
+	return new Object[][]{
+	{ "myRock", new Integer(30)}, { "myStone", new Integer(20) },
+};
+}
+
+@Test(dataProvider="dataproviderName")
+public void myMethod(String name, integer n)
+{
+	System.out.println("Name: " + name + " with value " + n);
+}
+
+Dependencies in Program
+
+-->> Dependencies with annotation:
+
+Hard Dependencies >>> Will be skipped if there is any failure on the depends on methods/groups 
+
+Soft Dependencies >>> Will be executed all the Test Methods without depending on the results. soft dependency is obtained by adding "alwaysRun=true" in your @Test annotation.
+
+Keyword: dependsOnGroups and dependsOnMethods
+
+Example: @Test(dependsOnGroups= { groupName } ) or @Test(dependsOnMethods= { MethodName })
+
+//Dependencies in XML
+
+<suite name="SuiteName"> 
+	<test name="TestName">
+		<groups>
+			<dependencies>
+				<group name="c" depends-on="a b" />
+				<group name="z" depends-on="c" />
+			</dependencies>
+		</groups>
+	</test>
+</suite>
+
+//Parallelism and Time-outs
+
+--> Parallel Suites
+	
+	Running Several suite files which needs to be run in seperate threads. 
+
+	java org.testng.TestNG -suitethreadpoolsize 3 *.xml *.xml *.xml
+
+--> Parallel tests, classes and methods
+
+	Parallel attribute on the <suite> tag can take one of the following values. 
+
+	<suite name="My Suite"  parallel="methods" thread-count="5"> : TestNG will run all your test methods in separate threads. Dependent methods will also run in separate threads but they will respect the order that you specified.
+	
+	<suite name="My Suite"  parallel="tests" thread-count="5"> : TestNG will run all the methods in the same <test> tag in the same thread, but each <test> tag will be in a separate thread. This allows you to group all your classes that are not thread safe in the same <test> and guarantee they will all run in the same thread while taking advantage of TestNG using as many threads as possible to run your tests.
+	
+	<suite name="My Suite"  parallel="classes" thread-count="5"> : TestNG will run all the methods in the same class in the same thread, but each class will be run in a separate thread.
+	
+	<suite name="My Suite"  parallel="instances" thread-count="5"> : TestNG will run all the methods in the same instance in the same thread, but two methods on two different instances will be running in different threads.
+
+Also can be specify that a @Test method be invoked from different threads.
+
+@Test(threadPoolSize = 3, invocationCount = 10,  timeOut = 10000)
+public void testServer() {
+
+//Rerunning failed tests
+
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs testng.xml
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs test-outputs\testng-failed.xml
+
+Build an implementation of the interface org.testng.IRetryAnalyzer
+Bind this implementation to the @Test annotation for e.g., @Test(retryAnalyzer = LocalRetry.class)
